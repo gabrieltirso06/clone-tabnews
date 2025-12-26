@@ -27,7 +27,7 @@ export default async function migrations(request, response) {
       const penddingMigrations = await migrationRunner(
         defaultMigrationsOptions,
       );
-      response.status(200).json(penddingMigrations);
+      return response.status(200).json(penddingMigrations);
     }
 
     if (request.method === "POST") {
@@ -37,10 +37,10 @@ export default async function migrations(request, response) {
       });
 
       if (migratedMigrations.length > 0) {
-        response.status(201).json(migratedMigrations);
+        return response.status(201).json(migratedMigrations);
       }
 
-      response.status(200).json(migratedMigrations);
+      return response.status(200).json(migratedMigrations);
     }
   } catch (error) {
     console.error(error);
