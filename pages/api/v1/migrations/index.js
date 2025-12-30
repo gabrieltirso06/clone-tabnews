@@ -10,7 +10,7 @@ router.post(postHandler);
 export default router.handler(controller.errorHandlers);
 
 async function getHandler(request, response) {
-  const penddingMigrations = await migrator.listPendindgMigrations();
+  const penddingMigrations = await migrator.listPendingMigrations();
   return response.status(200).json(penddingMigrations);
 }
 
