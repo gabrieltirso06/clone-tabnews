@@ -2,7 +2,7 @@ import {
   InternalServerError,
   MethodNotAllowedError,
   ValidationError,
-  NotFoundError
+  NotFoundError,
 } from "infra/errors";
 
 function onNoMatchHandler(request, response) {
