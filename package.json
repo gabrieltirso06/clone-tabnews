@@ -1,0 +1,24 @@
+{
+  "name": "clone-tabnews",
+  "version": "1.0.0",
+  "description": "Projeto do curso.dev implementando um clone do https://tabnews.com.br",
+  "homepage": "https://github.com/gabrieltirso06/clone-tabnews#readme",
+  "bugs": {
+    "url": "https://github.com/gabrieltirso06/clone-tabnews/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gabrieltirso06/clone-tabnews.git"
+  },
+  "license": "MIT",
+  "author": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev"
+  },
+  "dependencies": {
+    "next": "^13.1.6",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}
