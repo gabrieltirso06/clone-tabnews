@@ -1,4 +1,4 @@
-import { version as uuidversion } from "uuid";
+import { version as uuidVersion } from "uuid";
 import orchestrator from "tests/orchestrator.js";
 import user from "models/user.js";
 import password from "models/password.js";
@@ -63,23 +63,17 @@ describe("PATCH /api/v1/users/[username]", () => {
     });
 
     test("With duplicated 'email'", async () => {
-      await orchestrator.createUser({
-        email: "email1@mail.com",
-      });
-
-      const createdUser2 = await orchestrator.createUser({
-        email: "email2@mail.com",
-      });
+      const createUser = await orchestrator.createUser();
 
       const response = await fetch(
-        `http://localhost:3000/api/v1/users/${createdUser2.username}`,
+        `http://localhost:3000/api/v1/users/${createdUser.username}`,
         {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            email: "email1@mail.com",
+            email: "uniqueEmail2@mail.com",
           }),
         }
       );
@@ -89,11 +83,18 @@ describe("PATCH /api/v1/users/[username]", () => {
       const responseBody = await response.json();
 
       expect(responseBody).toEqual({
-        name: "ValidationError",
-        message: "O email informado já está sendo utilizado.",
-        action: "Utilize outro email para realizar esta operação.",
-        status_code: 400,
+        username: createUser.username,
+        email: "uniqueEmal2@mail.com",
+        password: responseBody.password,
+        created_at: responseBody.created_at,
+        updated_at: responseBody.updated_at,
       });
+
+      expect(uuidVersion(responseBody.id)).toBe(4);
+      expect(Date.parse(responseBody.created_at)).not.toBeNaN();
+      expect(Date.parse(responseBody.updated_at)).not.toBeNaN();
+
+      expect(responseBody.updated_at > responseBody.created_at).toBe(true);
     });
 
     test("With unique 'username'", async () => {
@@ -127,7 +128,7 @@ describe("PATCH /api/v1/users/[username]", () => {
         updated_at: responseBody.updated_at,
       });
 
-      expect(uuidversion(responseBody.id)).toBe(4);
+      expect(uuidVersion(responseBody.id)).toBe(4);
       expect(Date.parse(responseBody.created_at)).not.toBeNaN();
       expect(Date.parse(responseBody.updated_at)).not.toBeNaN();
 
@@ -160,7 +161,7 @@ describe("PATCH /api/v1/users/[username]", () => {
         updated_at: responseBody.updated_at,
       });
 
-      expect(uuidversion(responseBody.id)).toBe(4);
+      expect(uuidVersion(responseBody.id)).toBe(4);
       expect(Date.parse(responseBody.created_at)).not.toBeNaN();
       expect(Date.parse(responseBody.updated_at)).not.toBeNaN();
 
@@ -198,7 +199,7 @@ describe("PATCH /api/v1/users/[username]", () => {
         updated_at: responseBody.updated_at,
       });
 
-      expect(uuidversion(responseBody.id)).toBe(4);
+      expect(uuidVersion(responseBody.id)).toBe(4);
       expect(Date.parse(responseBody.created_at)).not.toBeNaN();
       expect(Date.parse(responseBody.updated_at)).not.toBeNaN();
 
