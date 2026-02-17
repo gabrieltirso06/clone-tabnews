@@ -65,9 +65,9 @@ describe("GET /api/v1/users/[username]", () => {
       expect(Date.parse(responseBody.updated_at)).not.toBeNaN();
     });
 
-    test("With noneexistant username", async () => {
+    test("With nonexistent username", async () => {
       const response = await fetch(
-        "http://localhost:3000/api/v1/users/usuarioinesistente"
+        "http://localhost:3000/api/v1/users/UsuarioInexistente"
       );
 
       expect(response.status).toBe(404);
@@ -76,7 +76,7 @@ describe("GET /api/v1/users/[username]", () => {
 
       expect(responseBody).toEqual({
         name: "NotFoundError",
-        message: "O usuário informado não foi encontrado no sistema.",
+        message: "O username informado não foi encontrado no sistema.",
         action: "Verifique se o username está digitado corretamente.",
         status_code: 404,
       });

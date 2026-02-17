@@ -11,7 +11,7 @@ beforeAll(async () => {
 
 describe("PATCH /api/v1/users/[username]", () => {
   describe("Anonimous user", () => {
-    test("With noneexistant 'username'", async () => {
+    test("With nonexistant 'username'", async () => {
       const response = await fetch(
         "http://localhost:3000/api/v1/users/usuarioinesistente",
         {
@@ -25,7 +25,7 @@ describe("PATCH /api/v1/users/[username]", () => {
 
       expect(responseBody).toEqual({
         name: "NotFoundError",
-        message: "O usuário informado não foi encontrado no sistema.",
+        message: "O username informado não foi encontrado no sistema.",
         action: "Verifique se o username está digitado corretamente.",
         status_code: 404,
       });
@@ -63,17 +63,23 @@ describe("PATCH /api/v1/users/[username]", () => {
     });
 
     test("With duplicated 'email'", async () => {
-      const createUser = await orchestrator.createUser();
+      await orchestrator.createUser({
+        email: "email1@curso.dev",
+      });
+
+      const createdUser2 = await orchestrator.createUser({
+        email: "email2@curso.dev",
+      });
 
       const response = await fetch(
-        `http://localhost:3000/api/v1/users/${createUser.username}`,
+        `http://localhost:3000/api/v1/users/${createdUser2.username}`,
         {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            email: "uniqueEmail2@mail.com",
+            email: "email1@curso.dev",
           }),
         }
       );
@@ -83,18 +89,11 @@ describe("PATCH /api/v1/users/[username]", () => {
       const responseBody = await response.json();
 
       expect(responseBody).toEqual({
-        username: createUser.username,
-        email: "uniqueEmal2@mail.com",
-        password: responseBody.password,
-        created_at: responseBody.created_at,
-        updated_at: responseBody.updated_at,
+        name: "ValidationError",
+        message: "O email informado já está sendo utilizado.",
+        action: "Utilize outro email para realizar esta operação.",
+        status_code: 400,
       });
-
-      expect(uuidVersion(responseBody.id)).toBe(4);
-      expect(Date.parse(responseBody.created_at)).not.toBeNaN();
-      expect(Date.parse(responseBody.updated_at)).not.toBeNaN();
-
-      expect(responseBody.updated_at > responseBody.created_at).toBe(true);
     });
 
     test("With unique 'username'", async () => {
