@@ -1,4 +1,4 @@
-import { version as uuidversion } from "uuid";
+import { version as uuidVersion } from "uuid";
 import orchestrator from "tests/orchestrator.js";
 import user from "models/user.js";
 import password from "models/password.js";
@@ -11,7 +11,7 @@ beforeAll(async () => {
 
 describe("PATCH /api/v1/users/[username]", () => {
   describe("Anonimous user", () => {
-    test("With noneexistant 'username'", async () => {
+    test("With nonexistant 'username'", async () => {
       const response = await fetch(
         "http://localhost:3000/api/v1/users/usuarioinesistente",
         {
@@ -25,7 +25,7 @@ describe("PATCH /api/v1/users/[username]", () => {
 
       expect(responseBody).toEqual({
         name: "NotFoundError",
-        message: "O usuário informado não foi encontrado no sistema.",
+        message: "O username informado não foi encontrado no sistema.",
         action: "Verifique se o username está digitado corretamente.",
         status_code: 404,
       });
@@ -64,11 +64,11 @@ describe("PATCH /api/v1/users/[username]", () => {
 
     test("With duplicated 'email'", async () => {
       await orchestrator.createUser({
-        email: "email1@mail.com",
+        email: "email1@curso.dev",
       });
 
       const createdUser2 = await orchestrator.createUser({
-        email: "email2@mail.com",
+        email: "email2@curso.dev",
       });
 
       const response = await fetch(
@@ -79,7 +79,7 @@ describe("PATCH /api/v1/users/[username]", () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            email: "email1@mail.com",
+            email: "email1@curso.dev",
           }),
         }
       );
@@ -127,7 +127,7 @@ describe("PATCH /api/v1/users/[username]", () => {
         updated_at: responseBody.updated_at,
       });
 
-      expect(uuidversion(responseBody.id)).toBe(4);
+      expect(uuidVersion(responseBody.id)).toBe(4);
       expect(Date.parse(responseBody.created_at)).not.toBeNaN();
       expect(Date.parse(responseBody.updated_at)).not.toBeNaN();
 
@@ -160,7 +160,7 @@ describe("PATCH /api/v1/users/[username]", () => {
         updated_at: responseBody.updated_at,
       });
 
-      expect(uuidversion(responseBody.id)).toBe(4);
+      expect(uuidVersion(responseBody.id)).toBe(4);
       expect(Date.parse(responseBody.created_at)).not.toBeNaN();
       expect(Date.parse(responseBody.updated_at)).not.toBeNaN();
 
@@ -198,7 +198,7 @@ describe("PATCH /api/v1/users/[username]", () => {
         updated_at: responseBody.updated_at,
       });
 
-      expect(uuidversion(responseBody.id)).toBe(4);
+      expect(uuidVersion(responseBody.id)).toBe(4);
       expect(Date.parse(responseBody.created_at)).not.toBeNaN();
       expect(Date.parse(responseBody.updated_at)).not.toBeNaN();
 
